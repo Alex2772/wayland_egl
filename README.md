@@ -17,7 +17,7 @@ configure variables.
 - `-DUSE_VIEWPORTER_PROTOCOL=ON` enables viewporter protocol (required by fractional scaling).
 - `-DUSE_DECORATION_PROTOCOL=ON`enables server side decorations protocol.
 
-Most notably, this example demonstrates pixel perfect fractional scaling (still not achieved by GTK and Qt lol)
+Most notably, this example demonstrates pixel perfect fractional scaling (still not achieved by GTK4 lol)
 
 ![Pixel perfect](docs/Screenshot_20250422_090949.png)
 
