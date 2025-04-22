@@ -423,7 +423,7 @@ int main(int argc, char const *argv[]) {
 
     // vertices
     {
-        GLfloat vVertices[] = {
+        static const GLfloat vVertices[] = {
                 -0.9f, 0.9f,  0.0f,  // Position 0
                 0.0f,  0.0f,         // TexCoord 0
                 -0.9f, -0.9f, 0.0f,  // Position 1
