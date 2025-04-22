@@ -26,4 +26,4 @@ observe bluriness:
 
 ![Blur](docs/Screenshot_20250422_061310.png)
 
-(Screenshots taken on Plasma 6.3.4 with nvidia GPU)
+(Screenshots taken on Plasma 6.3.4 with nvidia GPU and 1.5 scale factor)
