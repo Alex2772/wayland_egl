@@ -24,7 +24,7 @@ target_include_directories(wayland_opengl PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/inc
 target_link_libraries(wayland_opengl PUBLIC wayland-client wayland-egl EGL GLESv2)
 
 # options to tweak.
-foreach(OPTION USE_FRACTIONAL_SCALE_PROTOCOL USE_VIEWPORTER_PROTOCOL USE_DECORATION_PROTOCOL)
+foreach(OPTION USE_FRACTIONAL_SCALE_PROTOCOL USE_VIEWPORTER_PROTOCOL USE_DECORATION_PROTOCOL USE_BLUR_PROTOCOL)
     option(${OPTION} "Enable ${OPTION}" ON)
     message(STATUS "${OPTION}=${${OPTION}}")
     target_compile_definitions(wayland_opengl PRIVATE ${OPTION}=$<IF:$<BOOL:${${OPTION}}>,1,0>)

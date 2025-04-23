@@ -22,6 +22,9 @@
 #include <wayland-generated-protocols/xdg-decoration-unstable-v1.xml.h>
 #endif
 
+#if USE_BLUR_PROTOCOL
+#include <wayland-generated-protocols/blur.xml.h>
+#endif
 
 struct client_state {
     struct wl_display *display;
@@ -59,6 +62,11 @@ struct client_state {
 #if USE_DECORATION_PROTOCOL
     zxdg_decoration_manager_v1* decoration_manager = nullptr;
     zxdg_toplevel_decoration_v1* decoration = nullptr;
+#endif
+
+#if USE_BLUR_PROTOCOL
+    org_kde_kwin_blur_manager* blur_manager = nullptr;
+    org_kde_kwin_blur* blur = nullptr;
 #endif
 };
 
@@ -101,6 +109,12 @@ static const struct wl_registry_listener registry_listener = {
 #if USE_DECORATION_PROTOCOL
         if (interface2 == zxdg_decoration_manager_v1_interface.name) {
             state->decoration_manager = (zxdg_decoration_manager_v1*) wl_registry_bind(wl_registry, name, &zxdg_decoration_manager_v1_interface, version);
+        }
+#endif
+
+#if USE_BLUR_PROTOCOL
+        if (interface2 == org_kde_kwin_blur_manager_interface.name) {
+            state->blur_manager = (org_kde_kwin_blur_manager*) wl_registry_bind(wl_registry, name, &org_kde_kwin_blur_manager_interface, version);
         }
 #endif
     },
@@ -246,6 +260,18 @@ static void wayland_connect(struct client_state *state) {
     }
 #endif
 
+#if USE_BLUR_PROTOCOL
+    if (state->blur_manager) {
+        state->blur = org_kde_kwin_blur_manager_create(state->blur_manager, state->surface);
+
+        auto region = wl_compositor_create_region(state->compositor);
+        wl_region_add(region, 0, 0, std::numeric_limits<int16_t>::max(), std::numeric_limits<int16_t >::max());
+        org_kde_kwin_blur_set_region(state->blur, region);
+        org_kde_kwin_blur_commit(state->blur);
+        wl_region_destroy(region);
+    }
+#endif
+
     wl_surface_commit(state->surface);
 }
 
@@ -255,6 +281,10 @@ static void egl_init(struct client_state *state) {
     EGLint num_configs;
     EGLint attribs[] = {
             EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
+            EGL_RED_SIZE, 8,
+            EGL_GREEN_SIZE, 8,
+            EGL_BLUE_SIZE, 8,
+            EGL_ALPHA_SIZE, 8,
             EGL_NONE
     };
 
@@ -455,7 +485,11 @@ int main(int argc, char const *argv[]) {
 
     while(state.running) {
         wl_display_dispatch_pending(state.display);
-        glClearColor(0.0/255, 79.0/255, 158.0/255, 1.0);
+        if (state.blur) {
+            glClearColor(0, 0, 0, 0);
+        } else {
+            glClearColor(0.0 / 255, 79.0 / 255, 158.0 / 255, 1.0);
+        }
         glClear(GL_COLOR_BUFFER_BIT);
 
         GLushort indices[] = {1 ,2, 0, 2, 3, 0};
