@@ -26,7 +26,8 @@ displaying fractional scale properly.
 
 If you observe artifacts on the screenshot, it means something screwed up during processing of the application viewport.
 
-![Bad](docs/Screenshot_20250425_195017.png)
+![Bad1](docs/Screenshot_20250425_195017.png)
+![Bad2](docs/Screenshot_20250425_200237.png)
 
 Possible causer:
 
@@ -41,6 +42,8 @@ Most compositors have no problems with displaying integer scaled content. Fracti
 - Plasma 6.3.4
 - Scale factor 1.5
 - NVIDIA 570.133
+- Screenshot tool: Spectacle (use `Active Window` or `Select Window` to make a screenshot of this window,
+  monitor/rectangle options are broken)
 
 For demonstration purposes, you can disable fractional scaling by setting `-DUSE_FRACTIONAL_SCALE_PROTOCOL=OFF` to
 observe bluriness on fractional scales.
