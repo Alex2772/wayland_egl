@@ -1,12 +1,12 @@
 # Wayland EGL example
 
 C++ project that creates a simple window with an EGL context for the Wayland compositor. Among Wayland-specific things,
-the program simply draws a checkerboard pattern by initializing vertex buffers, texture and shader.
+the program simply draws a perfect checkerboard pattern.
 
 The project is self-sufficient, requires Wayland dev packages only and provides a set of protocol descriptions
 ~~stolen~~ borrowed from SDL.
 
-![Demo](docs/Screenshot_20250422_090357.png)
+![Demo](docs/Screenshot_20250425_193619.png)
 
 # Used protocols
 
@@ -17,13 +17,31 @@ configure variables.
 - `-DUSE_VIEWPORTER_PROTOCOL=ON` enables viewporter protocol (required by fractional scaling).
 - `-DUSE_DECORATION_PROTOCOL=ON`enables server side decorations protocol.
 
-Most notably, this example demonstrates pixel perfect fractional scaling (still not achieved by GTK4 lol)
+Most notably, this example demonstrates pixel perfect fractional scaling. To check, make a screenshot of the window,
+open it in an image editor and zoom in close enough so editor will display pixels. If you see a perfect checkerboard
+pattern that remains crisp on the whole surface, congratulations, everything is okay and your system is capable of
+displaying fractional scale properly.
 
-![Pixel perfect](docs/Screenshot_20250422_090949.png)
+![Perfect](docs/Screenshot_20250425_194507.png)
+
+If you observe artifacts on the screenshot, it means something screwed up during processing of the application viewport.
+
+![Bad](docs/Screenshot_20250425_195017.png)
+
+Possible causer:
+
+- this program
+- compositor
+- your screenshot tool
+
+In most cases, if something is wrong, it does not even needed to make a screenshot and scale it.
+
+Most compositors have no problems with displaying integer scaled content. Fractional scaling was tested on this setup:
+
+- Plasma 6.3.4
+- Scale factor 1.5
+- NVIDIA 570.133
 
 For demonstration purposes, you can disable fractional scaling by setting `-DUSE_FRACTIONAL_SCALE_PROTOCOL=OFF` to
-observe bluriness:
+observe bluriness on fractional scales.
 
-![Blur](docs/Screenshot_20250422_061310.png)
-
-(Screenshots taken on Plasma 6.3.4 with nvidia GPU and 1.5 scale factor)
