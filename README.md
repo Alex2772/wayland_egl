@@ -35,7 +35,7 @@ Possible causer:
 - compositor
 - your screenshot tool
 
-In most cases, if something is wrong, it does not even needed to make a screenshot and scale it.
+In most cases, if something is wrong, it is observable without needing to make a screenshot and scaling it.
 
 Most compositors have no problems with displaying integer scaled content. Fractional scaling was tested on this setup:
 
