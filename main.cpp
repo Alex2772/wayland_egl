@@ -279,14 +279,16 @@ static void egl_init(struct client_state *state) {
     EGLint major;
     EGLint minor;
     EGLint num_configs;
-    EGLint attribs[] = {
-            EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
+    EGLint configAttribs[] = {
+            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
             EGL_RED_SIZE, 8,
             EGL_GREEN_SIZE, 8,
             EGL_BLUE_SIZE, 8,
             EGL_ALPHA_SIZE, 8,
-            EGL_NONE
+            EGL_NONE, EGL_NONE,
     };
+
+    EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 3, EGL_NONE, EGL_NONE };
 
     state->egl_window = wl_egl_window_create(state->surface, state->logical_width,
                                              state->logical_height);
@@ -302,7 +304,7 @@ static void egl_init(struct client_state *state) {
         exit(EXIT_FAILURE);
     }
 
-    if(eglChooseConfig(state->egl_display, attribs, &state->egl_config, 1,
+    if(eglChooseConfig(state->egl_display, configAttribs, &state->egl_config, 1,
                         &num_configs) != EGL_TRUE) {
         fprintf(stderr, "Couldn't find matching EGL config\n");
         exit(EXIT_FAILURE);
@@ -317,7 +319,7 @@ static void egl_init(struct client_state *state) {
     }
 
     state->egl_context = eglCreateContext(state->egl_display, state->egl_config,
-                                          EGL_NO_CONTEXT, nullptr);
+                                          EGL_NO_CONTEXT, contextAttribs);
     if(state->egl_context == EGL_NO_CONTEXT) {
         fprintf(stderr, "Couldn't create EGL context\n");
         exit(EXIT_FAILURE);
